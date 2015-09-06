@@ -1,4 +1,4 @@
-package CoreProcess;
+package coreProcess;
 
 import java.util.stream.*;
 import java.util.*;
@@ -9,8 +9,8 @@ import org.jfree.data.xy.DefaultXYDataset;
 import org.jfree.data.xy.XYDataset;
 
 /*
- * Class to allow you to build a chart using JFreeChart from a supplied int array of data. Although very sparse at the moment, this is
- * implemented as its own class to allow for future expansion of different types / formats of graph
+ * Class to allow you to build a chart using JFreeChart from a supplied int array of data.
+ * Implemented as its own class to allow for future expansion of different types/ formats of graph
  */
 public class ChartBuilder{
 	

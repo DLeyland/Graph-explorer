@@ -1,4 +1,4 @@
-package CoreProcess;
+package coreProcess;
 
 import java.io.FileWriter;
 import java.io.Writer;

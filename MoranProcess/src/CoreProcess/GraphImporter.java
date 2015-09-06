@@ -1,4 +1,4 @@
-package CoreProcess;
+package coreProcess;
 
 import java.util.*;
 import java.io.*;
