@@ -64,9 +64,7 @@ public class MultiMutantProc {
 	protected int neighPicker(int vertex){
 		double cumulative =0;
 		for(int x=0;x<numVerts;x++){
-			if(x==vertex){ //want edge weights not targetVert's relative fitness
-				
-			}else{
+			if(x!=vertex){ //want edge weights, not targetVert's relative fitness
 				cumulative += matrix.get(x).get(vertex); 
 			}			
 		}
@@ -76,17 +74,16 @@ public class MultiMutantProc {
 			return vertex;
 		}
 
-		double scaleFactor = 1.0 - rand.nextDouble(); //Make the double's range inclusive of 1 but exclusive of 0
+		double scaleFactor = 1.0 - rand.nextDouble(); 
 		double targetVal = scaleFactor * cumulative;
 		
 		cumulative =0;
 		int targetVert=-1;
 		for(int x =0;x<numVerts;x++){
-			if(x==vertex){ 
-				//want edge weights not targetVert's relative fitness
-			}else{
+			if(x!=vertex){ //want edge weights not targetVert's relative fitness
 				cumulative += matrix.get(x).get(vertex); 
 			}
+			
 			if(cumulative>=targetVal){
 				targetVert=x;
 				break;
@@ -102,9 +99,7 @@ public class MultiMutantProc {
 	protected boolean isAbsorbed(){
 		int val = matrix.get(0).get(0);
 		for(int x=1;x<numVerts;x++){
-			if(matrix.get(x).get(x)==val){
-
-			}else{
+			if(matrix.get(x).get(x)!=val){
 				return false;
 			}
 		}
@@ -152,9 +147,6 @@ public class MultiMutantProc {
 			while(!isAbsorbed()){
 				performIteration();
 				x++;
-				if(x>10000){
-					//System.out.println("10000 boundary passed");
-				}
 			}
 			return x;
 		}
