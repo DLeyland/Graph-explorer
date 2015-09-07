@@ -33,7 +33,6 @@ public class Simulator{
 	public void moranSimulation2(int iterations, List<List<Integer>> matrix, int relativeFitness){
 		int numVerts = matrix.size();		
 		Random rand = new Random();
-		//long startTime = System.nanoTime();
 		for(int x=0;x<iterations;x++){						
 			int pos = rand.nextInt(numVerts);
 			matrix.get(pos).set(pos,relativeFitness);
@@ -42,8 +41,6 @@ public class Simulator{
 			fixResults.add(m.getAbsVal());
 			matrix.get(pos).set(pos,1);
 		}
-		//long endTime = System.nanoTime();
-		//System.out.println((endTime - startTime)/(1000000000f*60));
 	}
 	
 	public void envSimulation(int iterations, EnvGraph graph){
