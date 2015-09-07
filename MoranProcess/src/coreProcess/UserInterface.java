@@ -49,8 +49,7 @@ public class UserInterface extends JPanel{
 		menuBar.add(file);
 		menuBar.add(process);
 		menuBar.add(generate);
-		
-		
+			
 		//create and add the menu items for the file menu
 		loadGraph = new JMenuItem("Load Graph");
 		loadGraph.addActionListener(new FileListener("load"));
@@ -99,9 +98,7 @@ public class UserInterface extends JPanel{
         
         //add text area and menuBar to this JPanel
 		add(menuBar,BorderLayout.PAGE_START);
-		add(scrollPane,BorderLayout.CENTER);
-		
-		
+		add(scrollPane,BorderLayout.CENTER);		
 	}
 	
 	public static void main(String args[]){
