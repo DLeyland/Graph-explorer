@@ -12,7 +12,6 @@ public class MoranProcess{
 	protected Random rand;
 	protected int numVerts;
 	protected int absVal;
-	int mutantFitness = 2;
 	
 	public MoranProcess(List<List<Integer>> inputMatrix){
 		matrix = new ArrayList<List<Integer>>();
@@ -48,7 +47,7 @@ public class MoranProcess{
 		double scaleFactor = 1.0 - rand.nextDouble(); //Make the double's range inclusive of 1 but exclusive of 0
 		double targetVal = scaleFactor * cumulative;
 		
-		cumulative =0;
+		cumulative=0;
 		int targetVert=-1;
 		for(int x =0;x<numVerts;x++){
 			cumulative += matrix.get(x).get(x);
@@ -67,29 +66,21 @@ public class MoranProcess{
 	protected int neighPicker(int vertex){
 		double cumulative =0;
 		for(int x=0;x<numVerts;x++){
-			if(x==vertex){ //want edge weights not targetVert's relative fitness
-				
-			}else{
+			if(x!=vertex){ //want edge weights not targetVert's relative fitness
 				cumulative += matrix.get(x).get(vertex); 
 			}			
-		}
-		
-		if(cumulative==0){
-			System.out.println("Ruh-roh!");
-			return vertex;
 		}
 
 		double scaleFactor = 1.0 - rand.nextDouble(); //Make the double's range inclusive of 1 but exclusive of 0
 		double targetVal = scaleFactor * cumulative;
 		
-		cumulative =0;
+		cumulative=0;
 		int targetVert=-1;
 		for(int x =0;x<numVerts;x++){
-			if(x==vertex){ 
-				//want edge weights not targetVert's relative fitness
-			}else{
+			if(x!=vertex){ //want edge weights not targetVert's relative fitness
 				cumulative += matrix.get(x).get(vertex); 
 			}
+			
 			if(cumulative>=targetVal){
 				targetVert=x;
 				break;
@@ -105,9 +96,7 @@ public class MoranProcess{
 	protected boolean isAbsorbed(){
 		int val = matrix.get(0).get(0);
 		for(int x=1;x<numVerts;x++){
-			if(matrix.get(x).get(x)==val){
-
-			}else{
+			if(matrix.get(x).get(x)!=val){
 				return false;
 			}
 		}
@@ -145,13 +134,6 @@ public class MoranProcess{
 			while(!isAbsorbed()){
 				performIteration();
 				x++;
-				//FPRAS
-				/*if((numVerts - numResidents())>=Math.pow((numVerts*(mutantFitness-1)), 0.25)){
-					break;
-				}*/
-				//if(x>10000){
-					//System.out.println("10000 boundary passed");
-				//}
 			}
 			return x;
 		}

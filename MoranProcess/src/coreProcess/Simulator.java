@@ -75,7 +75,7 @@ public class Simulator{
 			swapPosition = rand.nextInt(numVerts);
 			initialValue = matrix.get(swapPosition).get(swapPosition);
 			matrix.get(swapPosition).set(swapPosition,-mutantFitness);
-			MultiMutantProc m = new MultiMutantProc(matrix);
+			MoranProcess m = new MoranProcess(matrix);
 			while(true){
 				m.performIteration();
 				if(m.numResidents()==numVerts){
@@ -90,7 +90,7 @@ public class Simulator{
 		}
 		
 		//Introduce the second mutant type and evolve the graph until absorption is reached, this is done iterations times
-		MultiMutantProc m2;
+		MoranProcess m2;
 		int valueStore;
 		for(int x=0;x<iterations;x++){
 			swapPosition = rand.nextInt(numVerts);
@@ -100,7 +100,7 @@ public class Simulator{
 			}else{
 				filledMatrix.get(swapPosition).set(swapPosition,(mutantFitness*mutantFitness));
 			}
-			m2 = new MultiMutantProc(filledMatrix);
+			m2 = new MoranProcess(filledMatrix);
 			iterResults.add(m2.runProcess());
 			fixResults.add(m2.getAbsVal());
 			filledMatrix.get(swapPosition).set(swapPosition,valueStore);

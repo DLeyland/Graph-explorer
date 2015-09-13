@@ -39,7 +39,6 @@ public class InvestigationListener implements ActionListener{
 		JTextField iterNumField = new JTextField();
 		JTextField graphNumField = new JTextField();
 		JTextField relFitField = new JTextField();
-		JTextField t1NumField = new JTextField();
 		JCheckBox directedCheck = new JCheckBox();
 		Object[] message={
 				"Minimum number of vertices:",minVertField,
@@ -47,7 +46,6 @@ public class InvestigationListener implements ActionListener{
 				"Iterations per graph:",iterNumField,
 				"Graphs per vertex number",graphNumField,
 				"Mutant relative fitness", relFitField,
-				"Number of type-1 mutants", t1NumField,
 				"Directed graph:",directedCheck
 		};
 		
@@ -66,9 +64,9 @@ public class InvestigationListener implements ActionListener{
 			int graphNumber = Integer.valueOf(graphNumField.getText());
 			Boolean isDirected = directedCheck.isSelected();
 			int mutantFitness = Integer.valueOf(relFitField.getText());
-			int numT1Mutants = Integer.valueOf(t1NumField.getText());
 			
 		    //Initialise a threadPool and an array of investigators to provide each thread with an Investigator runnable
+			long startTime = System.nanoTime();
 			int numThreads = 4;
 			Investigator[] invArray = new Investigator[numThreads];
 			ExecutorService threadPool = Executors.newFixedThreadPool(numThreads);
@@ -76,25 +74,25 @@ public class InvestigationListener implements ActionListener{
 			
 			//Assign the tasks to the threads
 			for(int i=0;i<numThreads;i++){
-				invArray[i] = new Investigator(vertLimit,iterations,graphNumber/numThreads,isDirected,mutantFitness,numT1Mutants,false,vertFloor);;
+				invArray[i] = new Investigator(vertLimit,iterations,graphNumber/numThreads,isDirected,mutantFitness,vertFloor);
 				futureArray[i] = threadPool.submit(invArray[i]);
 			}
 			
 			threadPool.shutdown();
 			
-		
+			//Wait till all the threads are finished, note this could cause the application to hang for the user if the threads deadlock
 			try{
 				for(Future future: futureArray){
 					future.get();
 				}
-
+				//threadPool.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
 			}catch(ExecutionException except){					
 				System.out.println(except);
 				except.printStackTrace();
 			}catch(InterruptedException ex){
 				System.out.println(ex);
 			}
-	
+			
 			
 			//The next two blocks average the results of the different threads into 1 array
 			double[] meanArray = new double[vertLimit];
@@ -115,6 +113,8 @@ public class InvestigationListener implements ActionListener{
 				meanError[x] = Math.sqrt(meanError[x]);
 				fixProbError[x] = Math.sqrt(fixProbError[x]);
 			}
+			
+			long endTime = System.nanoTime();
 			
 			//The remaining code is for printing and producing graphs of the results
 			UserInterface.textArea.append("\n");	
@@ -292,6 +292,7 @@ public class InvestigationListener implements ActionListener{
 		JTextField iterNumField = new JTextField();
 		JTextField graphNumField = new JTextField();
 		JTextField relFitField = new JTextField();
+		JTextField t1NumField = new JTextField();
 		JCheckBox directedCheck = new JCheckBox();
 		Object[] message={
 				"Minimum number of vertices:",minVertField,
@@ -299,6 +300,7 @@ public class InvestigationListener implements ActionListener{
 				"Iterations per graph:",iterNumField,
 				"Graphs per vertex number",graphNumField,
 				"Mutant relative fitness", relFitField,
+				"Number of type-1 mutants", t1NumField,
 				"Directed graph:",directedCheck
 		};
 		
@@ -317,9 +319,9 @@ public class InvestigationListener implements ActionListener{
 			int graphNumber = Integer.valueOf(graphNumField.getText());
 			Boolean isDirected = directedCheck.isSelected();
 			int mutantFitness = Integer.valueOf(relFitField.getText());
+			int numT1Mutants = Integer.valueOf(t1NumField.getText());
 			
 		    //Initialise a threadPool and an array of investigators to provide each thread with an Investigator runnable
-			long startTime = System.nanoTime();
 			int numThreads = 4;
 			Investigator[] invArray = new Investigator[numThreads];
 			ExecutorService threadPool = Executors.newFixedThreadPool(numThreads);
@@ -327,25 +329,25 @@ public class InvestigationListener implements ActionListener{
 			
 			//Assign the tasks to the threads
 			for(int i=0;i<numThreads;i++){
-				invArray[i] = new Investigator(vertLimit,iterations,graphNumber/numThreads,isDirected,mutantFitness,vertFloor);
+				invArray[i] = new Investigator(vertLimit,iterations,graphNumber/numThreads,isDirected,mutantFitness,numT1Mutants,false,vertFloor);;
 				futureArray[i] = threadPool.submit(invArray[i]);
 			}
 			
 			threadPool.shutdown();
 			
-			//Wait till all the threads are finished, note this could cause the application to hang for the user if the threads deadlock
+		
 			try{
 				for(Future future: futureArray){
 					future.get();
 				}
-				//threadPool.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
+
 			}catch(ExecutionException except){					
 				System.out.println(except);
 				except.printStackTrace();
 			}catch(InterruptedException ex){
 				System.out.println(ex);
 			}
-			
+	
 			
 			//The next two blocks average the results of the different threads into 1 array
 			double[] meanArray = new double[vertLimit];
@@ -366,8 +368,6 @@ public class InvestigationListener implements ActionListener{
 				meanError[x] = Math.sqrt(meanError[x]);
 				fixProbError[x] = Math.sqrt(fixProbError[x]);
 			}
-			
-			long endTime = System.nanoTime();
 			
 			//The remaining code is for printing and producing graphs of the results
 			UserInterface.textArea.append("\n");	
@@ -406,5 +406,6 @@ public class InvestigationListener implements ActionListener{
 			chartFrame2.pack();
 			chartFrame2.setVisible(true);
 		}
+		
 	}
 }
